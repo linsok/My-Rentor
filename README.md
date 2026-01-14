@@ -49,13 +49,14 @@ A comprehensive rental platform that connects property owners with renters, feat
 ## 📁 Project Structure
 
 ```
-WCTll-Project/
+housing-analyzer-main/
 ├── backend/              # Django backend
 │   ├── housing_analyzer/ # Main project
 │   ├── api/             # REST API app
 │   ├── users/           # User management
 │   ├── properties/      # Property management
 │   ├── bookings/        # Booking system
+│   ├── payments/        # Bakong KHQR payment system
 │   ├── analytics/       # Analytics engine
 │   └── requirements.txt
 ├── frontend/            # React frontend
@@ -66,6 +67,9 @@ WCTll-Project/
 │   │   ├── utils/       # Utilities
 │   │   └── App.jsx
 │   └── package.json
+├── BAKONG_SETUP_COMPLETE.md
+├── setup_bakong.bat
+├── setup_bakong.ps1
 └── README.md
 ```
 
