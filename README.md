@@ -27,6 +27,7 @@ A comprehensive rental platform that connects property owners with renters, feat
 
 ### Frontend
 - React.js 18
+- Vite build tool
 - TailwindCSS for styling
 - shadcn/ui components
 - Lucide React icons
@@ -59,13 +60,15 @@ housing-analyzer-main/
 │   ├── payments/        # Bakong KHQR payment system
 │   ├── analytics/       # Analytics engine
 │   └── requirements.txt
-├── frontend/            # React frontend
+├── frontend/            # React.js frontend with Vite
 │   ├── src/
 │   │   ├── components/  # Reusable components
 │   │   ├── pages/       # Page components
 │   │   ├── services/    # API services
 │   │   ├── utils/       # Utilities
 │   │   └── App.jsx
+│   ├── index.html
+│   ├── vite.config.js
 │   └── package.json
 ├── BAKONG_SETUP_COMPLETE.md
 ├── setup_bakong.bat
