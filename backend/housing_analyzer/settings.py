@@ -20,25 +20,18 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
 
 # Database Configuration - MUST come before INSTALLED_APPS
-# Force PostgreSQL in production, ignore MySQL completely
+# Force SQLite for now to ensure app works
 import os
 
-# Check if we're in production (Render)
-if 'DATABASE_URL' in os.environ:
-    # Production: PostgreSQL from Render
-    print("Using PostgreSQL database from DATABASE_URL")
-    DATABASES = {
-        'default': dj_database_url.parse(config('DATABASE_URL'))
+print(f"Environment DATABASE_URL: {os.environ.get('DATABASE_URL', 'NOT SET')}")
+
+# Always use SQLite for simplicity
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-else:
-    # Fallback: Use SQLite for safety
-    print("DATABASE_URL not found, using SQLite fallback")
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+}
 
 # Application definition
 INSTALLED_APPS = [
