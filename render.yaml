@@ -28,8 +28,7 @@ services:
         sync: false
       - key: GOOGLE_MAPS_API_KEY
         sync: false
-
-databases:
+    databases:
   # MySQL Database
   - name: housing-analyzer-db
     plan: free
