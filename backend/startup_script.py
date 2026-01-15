@@ -8,17 +8,6 @@ from django.core.management import execute_from_command_line
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'housing_analyzer.settings')
 django.setup()
 
-def run_migrations():
-    """Run migrations with error handling"""
-    try:
-        print("🔄 Running Django migrations...")
-        execute_from_command_line(['manage.py', 'migrate', '--verbosity', '2'])
-        print("✅ Migrations completed successfully")
-        return True
-    except Exception as e:
-        print(f"❌ Migration failed: {e}")
-        return False
-
 def create_sample_data():
     """Create sample data if tables are empty"""
     try:
@@ -104,11 +93,6 @@ def create_sample_data():
 if __name__ == '__main__':
     print("🚀 Starting Housing Analyzer Backend Setup")
     
-    # Run migrations
-    if run_migrations():
-        # Create sample data
-        create_sample_data()
-        print("✅ Setup completed successfully")
-    else:
-        print("❌ Setup failed")
-        sys.exit(1)
+    # Create sample data (migrations already run by startCommand)
+    create_sample_data()
+    print("✅ Setup completed successfully")
