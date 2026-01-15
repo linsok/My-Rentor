@@ -22,6 +22,10 @@ ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(','
 # Database Configuration - MUST come before INSTALLED_APPS
 # Force SQLite for now to ensure app works
 import os
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 print(f"Environment DATABASE_URL: {os.environ.get('DATABASE_URL', 'NOT SET')}")
 
@@ -32,6 +36,8 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+
+logger.info("Database configured successfully")
 
 # Application definition
 INSTALLED_APPS = [
