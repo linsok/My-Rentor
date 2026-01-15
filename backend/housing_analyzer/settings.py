@@ -29,11 +29,17 @@ logger = logging.getLogger(__name__)
 print(f"Environment DATABASE_URL: {os.environ.get('DATABASE_URL', 'NOT SET')}")
 
 # Use PostgreSQL if DATABASE_URL is available (Render), otherwise use SQLite (local development)
-if os.environ.get('DATABASE_URL'):
+database_url = os.environ.get('DATABASE_URL')
+print(f"Environment DATABASE_URL: {database_url}")
+
+if database_url:
+    print("Using PostgreSQL database (Render)")
     DATABASES = {
-        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
+        'default': dj_database_url.parse(database_url)
     }
+    print(f"Database configured: {DATABASES['default']}")
 else:
+    print("Using SQLite database (local development)")
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
