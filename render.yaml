@@ -5,8 +5,8 @@ services:
     runtime: python
     plan: free
     rootDir: backend
-    buildCommand: "mkdir -p /opt/render/project/data && pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate"
-    startCommand: "python manage.py migrate && gunicorn housing_analyzer.wsgi:application --bind 0.0.0.0:$PORT"
+    buildCommand: "mkdir -p /opt/render/project/data && pip install -r requirements.txt && python manage.py collectstatic --no-input"
+    startCommand: "python startup_script.py && gunicorn housing_analyzer.wsgi:application --bind 0.0.0.0:$PORT"
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.00
