@@ -30,10 +30,19 @@ print(f"Environment DATABASE_URL: {os.environ.get('DATABASE_URL', 'NOT SET')}")
 
 # Force SQLite for now to ensure app works on Render
 print("Using SQLite database (forced for Render deployment)")
+
+# Use a writable directory for the SQLite database on Render
+import os
+db_path = os.path.join(BASE_DIR, 'db.sqlite3')
+print(f"Database path: {db_path}")
+
+# Ensure the database directory exists
+os.makedirs(os.path.dirname(db_path), exist_ok=True)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': db_path,
     }
 }
 
