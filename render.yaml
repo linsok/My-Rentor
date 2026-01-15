@@ -26,8 +26,10 @@ services:
         sync: false
 
 databases:
-  # PostgreSQL Database
+  # MySQL Database
   - name: housing-analyzer-db
     plan: free
     databaseName: housing_analyzer
     user: housing_analyzer
+    mysql:
+      version: '8'

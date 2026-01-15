@@ -19,7 +19,7 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
 
-# Database Configuration - Temporarily force SQLite for Render deployment
+# Database Configuration - Use MySQL on Render
 import os
 import logging
 
@@ -28,23 +28,22 @@ logger = logging.getLogger(__name__)
 
 print(f"Environment DATABASE_URL: {os.environ.get('DATABASE_URL', 'NOT SET')}")
 
-# Force SQLite for now to ensure app works on Render
-print("Using SQLite database (forced for Render deployment)")
-
-# Use a writable directory for the SQLite database on Render
-import os
-db_path = os.path.join(BASE_DIR, 'db.sqlite3')
-print(f"Database path: {db_path}")
-
-# Ensure the database directory exists
-os.makedirs(os.path.dirname(db_path), exist_ok=True)
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': db_path,
+# Check if we're in production (Render) and use MySQL
+if 'DATABASE_URL' in os.environ:
+    # Production: MySQL from Render
+    print("Using MySQL database from DATABASE_URL")
+    DATABASES = {
+        'default': dj_database_url.parse(config('DATABASE_URL'))
     }
-}
+else:
+    # Development: Use SQLite for safety
+    print("DATABASE_URL not found, using SQLite fallback")
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 logger.info("Database configured successfully")
 
