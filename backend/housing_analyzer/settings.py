@@ -20,7 +20,6 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
 
 # Database Configuration - MUST come before INSTALLED_APPS
-# Force SQLite for now to ensure app works
 import os
 import logging
 
@@ -29,13 +28,18 @@ logger = logging.getLogger(__name__)
 
 print(f"Environment DATABASE_URL: {os.environ.get('DATABASE_URL', 'NOT SET')}")
 
-# Always use SQLite for simplicity
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+# Use PostgreSQL if DATABASE_URL is available (Render), otherwise use SQLite (local development)
+if os.environ.get('DATABASE_URL'):
+    DATABASES = {
+        'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        }
+    }
 
 logger.info("Database configured successfully")
 
