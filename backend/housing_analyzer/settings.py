@@ -32,6 +32,11 @@ print(f"Environment DATABASE_URL: {os.environ.get('DATABASE_URL', 'NOT SET')}")
 database_url = os.environ.get('DATABASE_URL')
 print(f"Environment DATABASE_URL: {database_url}")
 
+# Also check for other possible environment variable names Render might use
+if not database_url:
+    database_url = os.environ.get('POSTGRES_URL') or os.environ.get('POSTGRESQL_URL')
+    print(f"Trying alternative DATABASE_URL: {database_url}")
+
 if database_url:
     print("Using PostgreSQL database (Render)")
     DATABASES = {
