@@ -19,38 +19,44 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
 
-# Database Configuration - Force SQLite for now to get app working
+# Database Configuration
 import os
 import logging
+import dj_database_url
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 print(f"Environment DATABASE_URL: {os.environ.get('DATABASE_URL', 'NOT SET')}")
 
-# Force SQLite for now to ensure app works on Render
-print("Using SQLite database (forced for Render deployment)")
-
-# Use a writable directory for the SQLite database on Render
-import os
-# On Render, use /opt/render/project/data for persistent storage
+# Use PostgreSQL on production (Render), SQLite locally
 if os.environ.get('RENDER'):
-    db_path = '/opt/render/project/data/db.sqlite3'
-    print(f"Running on Render, using database path: {db_path}")
+    # Production: Use PostgreSQL on Render
+    DATABASE_URL = os.environ.get('DATABASE_URL')
+    if DATABASE_URL:
+        print("Using PostgreSQL database (Render production)")
+        DATABASES = {
+            'default': dj_database_url.parse(DATABASE_URL)
+        }
+    else:
+        print("WARNING: DATABASE_URL not found, falling back to SQLite")
+        db_path = os.path.join(BASE_DIR, 'db.sqlite3')
+        DATABASES = {
+            'default': {
+                'ENGINE': 'django.db.backends.sqlite3',
+                'NAME': db_path,
+            }
+        }
 else:
+    # Development: Use SQLite locally
+    print("Using SQLite database (local development)")
     db_path = os.path.join(BASE_DIR, 'db.sqlite3')
-    print(f"Running locally, using database path: {db_path}")
-
-# Ensure the database directory exists
-os.makedirs(os.path.dirname(db_path), exist_ok=True)
-print(f"Database directory exists: {os.path.exists(os.path.dirname(db_path))}")
-
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': db_path,
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': db_path,
+        }
     }
-}
 
 logger.info("Database configured successfully")
 
