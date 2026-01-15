@@ -33,7 +33,11 @@ print("Using SQLite database (forced for Render deployment)")
 
 # Use a writable directory for the SQLite database on Render
 import os
-db_path = os.path.join(BASE_DIR, 'db.sqlite3')
+# On Render, use /opt/render/project/data for persistent storage
+if os.environ.get('RENDER'):
+    db_path = '/opt/render/project/data/db.sqlite3'
+else:
+    db_path = os.path.join(BASE_DIR, 'db.sqlite3')
 print(f"Database path: {db_path}")
 
 # Ensure the database directory exists
