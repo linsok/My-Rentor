@@ -1,0 +1,78 @@
+from django.contrib.auth.models import User
+from properties.models import Property
+
+print("=== Creating sample data ===")
+
+# Create sample user
+user, created = User.objects.get_or_create(
+    username='admin',
+    defaults={
+        'email': 'admin@example.com',
+        'first_name': 'Admin',
+        'last_name': 'User'
+    }
+)
+
+if created:
+    user.set_password('password123')
+    user.save()
+    print("Created admin user")
+else:
+    print("Admin user already exists")
+
+# Create sample properties
+properties_data = [
+    {
+        'title': 'Modern Downtown Apartment',
+        'description': 'Beautiful modern apartment in downtown area',
+        'address': '123 Main St, Downtown',
+        'rent_price': 1500.00,
+        'bedrooms': 2,
+        'bathrooms': 1,
+        'area_sqm': 85,
+        'property_type': 'apartment',
+        'status': 'available',
+        'verification_status': 'verified',
+        'owner': user
+    },
+    {
+        'title': 'Cozy Studio Near Park',
+        'description': 'Perfect studio apartment near park',
+        'address': '456 Park Ave',
+        'rent_price': 1200.00,
+        'bedrooms': 1,
+        'bathrooms': 1,
+        'area_sqm': 55,
+        'property_type': 'studio',
+        'status': 'available',
+        'verification_status': 'verified',
+        'owner': user
+    },
+    {
+        'title': 'Spacious Family Home',
+        'description': 'Large family home with garden',
+        'address': '789 Family Rd',
+        'rent_price': 2500.00,
+        'bedrooms': 4,
+        'bathrooms': 2,
+        'area_sqm': 200,
+        'property_type': 'house',
+        'status': 'available',
+        'verification_status': 'verified',
+        'owner': user
+    }
+]
+
+for prop_data in properties_data:
+    prop, created = Property.objects.get_or_create(
+        title=prop_data['title'],
+        defaults=prop_data
+    )
+    if created:
+        print(f"Created property: {prop.title}")
+    else:
+        print(f"Property already exists: {prop.title}")
+
+print(f"Total properties in database: {Property.objects.count()}")
+print("=== Sample data creation completed ===")
+exit()
