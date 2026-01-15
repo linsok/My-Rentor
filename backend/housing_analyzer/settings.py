@@ -19,7 +19,7 @@ DEBUG = config('DEBUG', default=True, cast=bool)
 
 ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1').split(',')
 
-# Database Configuration - MUST come before INSTALLED_APPS
+# Database Configuration - Temporarily force SQLite for Render deployment
 import os
 import logging
 
@@ -28,43 +28,14 @@ logger = logging.getLogger(__name__)
 
 print(f"Environment DATABASE_URL: {os.environ.get('DATABASE_URL', 'NOT SET')}")
 
-# Use PostgreSQL if DATABASE_URL is available (Render), otherwise use SQLite (local development)
-database_url = os.environ.get('DATABASE_URL')
-print(f"Environment DATABASE_URL: {database_url}")
-
-# Also check for other possible environment variable names Render might use
-if not database_url:
-    database_url = os.environ.get('POSTGRES_URL') or os.environ.get('POSTGRESQL_URL')
-    print(f"Trying alternative DATABASE_URL: {database_url}")
-
-# If still no database URL, try to construct it from individual variables
-if not database_url:
-    db_name = os.environ.get('DB_NAME') or os.environ.get('POSTGRES_DB') or 'housing_analyzer'
-    db_user = os.environ.get('DB_USER') or os.environ.get('POSTGRES_USER') or 'housing_analyzer'
-    db_password = os.environ.get('DB_PASSWORD') or os.environ.get('POSTGRES_PASSWORD')
-    db_host = os.environ.get('DB_HOST') or os.environ.get('POSTGRES_HOST') or 'localhost'
-    db_port = os.environ.get('DB_PORT') or os.environ.get('POSTGRES_PORT') or '5432'
-    
-    if db_password:
-        database_url = f"postgres://{db_user}:{db_password}@{db_host}:{db_port}/{db_name}"
-        print(f"Constructed DATABASE_URL from individual variables: {database_url}")
-    else:
-        print(f"Could not construct DATABASE_URL - missing password")
-
-if database_url:
-    print("Using PostgreSQL database (Render)")
-    DATABASES = {
-        'default': dj_database_url.parse(database_url)
+# Force SQLite for now to ensure app works on Render
+print("Using SQLite database (forced for Render deployment)")
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
-    print(f"Database configured: {DATABASES['default']}")
-else:
-    print("Using SQLite database (local development)")
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+}
 
 logger.info("Database configured successfully")
 
