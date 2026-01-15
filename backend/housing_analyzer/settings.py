@@ -28,6 +28,8 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 print(f"Environment DATABASE_URL: {os.environ.get('DATABASE_URL', 'NOT SET')}")
+print(f"Environment RENDER: {os.environ.get('RENDER', 'NOT SET')}")
+print(f"All environment variables starting with DB: {[k for k in os.environ.keys() if k.startswith('DB')]}")
 
 # Use PostgreSQL on production (Render), SQLite locally
 if os.environ.get('RENDER'):
