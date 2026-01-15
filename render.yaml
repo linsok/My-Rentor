@@ -9,7 +9,7 @@ services:
     startCommand: "gunicorn housing_analyzer.wsgi:application"
     envVars:
       - key: PYTHON_VERSION
-        value: 3.11.0
+        value: 3.11.00
       - key: SECRET_KEY
         generateValue: true
       - key: DEBUG
