@@ -77,27 +77,34 @@ TEMPLATES = [
 WSGI_APPLICATION = 'housing_analyzer.wsgi.application'
 
 # Database Configuration
-# MySQL Database Configuration
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'housing_analyzer',  # Database name
-        'USER': 'root',             # MySQL username
-        'PASSWORD': 'Soklin0976193630',  # MySQL password
-        'HOST': 'localhost',        # Database host
-        'PORT': '3306',             # MySQL port (default is 3306)
-        'OPTIONS': {
-            'init_command': "SET sql_mode='STRICT_TRANS_TABLES', time_zone='+07:00'",
-            'charset': 'utf8mb4',
-        },
-        'TIME_ZONE': 'Asia/Phnom_Penh',
-        'USE_TZ': True,
-        'TEST': {
-            'CHARSET': 'utf8mb4',
-            'COLLATION': 'utf8mb4_unicode_ci',
+# Use PostgreSQL in production, MySQL in development
+if config('DATABASE_URL', default=None):
+    # Production: PostgreSQL from Render
+    DATABASES = {
+        'default': dj_database_url.parse(config('DATABASE_URL'))
+    }
+else:
+    # Development: MySQL
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'housing_analyzer',  # Database name
+            'USER': 'root',             # MySQL username
+            'PASSWORD': 'Soklin0976193630',  # MySQL password
+            'HOST': 'localhost',        # Database host
+            'PORT': '3306',             # MySQL port (default is 3306)
+            'OPTIONS': {
+                'init_command': "SET sql_mode='STRICT_TRANS_TABLES', time_zone='+07:00'",
+                'charset': 'utf8mb4',
+            },
+            'TIME_ZONE': 'Asia/Phnom_Penh',
+            'USE_TZ': True,
+            'TEST': {
+                'CHARSET': 'utf8mb4',
+                'COLLATION': 'utf8mb4_unicode_ci',
+            }
         }
     }
-}
 
 # Option 2: SQLite (Simple, for development only)
 # DATABASES = {
