@@ -5,7 +5,7 @@ services:
     runtime: python
     plan: free
     rootDir: backend
-    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate && python create_sample_data.py"
+    buildCommand: "pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate && echo 'from properties.models import Property; from django.contrib.auth.models import User; User.objects.get_or_create(username=\"admin\", defaults={\"email\": \"admin@example.com\"}); Property.objects.get_or_create(title=\"Test Property\", defaults={\"title\": \"Test Property\", \"description\": \"Test\", \"address\": \"123 Test St\", \"price\": 1000, \"bedrooms\": 2, \"bathrooms\": 1, \"area_sqm\": 100, \"property_type\": \"apartment\", \"status\": \"available\", \"verification_status\": \"verified\"})' | python manage.py shell"
     startCommand: "gunicorn housing_analyzer.wsgi:application --bind 0.0.0.0:$PORT"
     envVars:
       - key: PYTHON_VERSION
