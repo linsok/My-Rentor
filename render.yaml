@@ -18,21 +18,9 @@ services:
         value: "*"
       - key: CORS_ALLOWED_ORIGINS
         value: "https://my-rentor.vercel.app,https://housing-analyzer-backend.onrender.com"
-      - key: DATABASE_URL
-        fromDatabase:
-          name: housing-analyzer-db
-          property: connectionString
       - key: STRIPE_PUBLIC_KEY
         sync: false
       - key: STRIPE_SECRET_KEY
         sync: false
       - key: GOOGLE_MAPS_API_KEY
         sync: false
-    databases:
-  # MySQL Database
-  - name: housing-analyzer-db
-    plan: free
-    databaseName: housing_analyzer
-    user: housing_analyzer
-    mysql:
-      version: '8'
