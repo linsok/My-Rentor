@@ -36,12 +36,14 @@ import os
 # On Render, use /opt/render/project/data for persistent storage
 if os.environ.get('RENDER'):
     db_path = '/opt/render/project/data/db.sqlite3'
+    print(f"Running on Render, using database path: {db_path}")
 else:
     db_path = os.path.join(BASE_DIR, 'db.sqlite3')
-print(f"Database path: {db_path}")
+    print(f"Running locally, using database path: {db_path}")
 
 # Ensure the database directory exists
 os.makedirs(os.path.dirname(db_path), exist_ok=True)
+print(f"Database directory exists: {os.path.exists(os.path.dirname(db_path))}")
 
 DATABASES = {
     'default': {
