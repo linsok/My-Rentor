@@ -5,7 +5,7 @@ services:
     runtime: python
     plan: free
     rootDir: backend
-    buildCommand: "mkdir -p /opt/render/project/src/backend && pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate && python -c \"import os; os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'housing_analyzer.settings'); import django; django.setup(); from properties.models import Property; from django.contrib.auth.models import User; user, _ = User.objects.get_or_create(username='admin', defaults={'email': 'admin@example.com'}); Property.objects.get_or_create(title='Test Property', defaults={'title': 'Test Property', 'description': 'Test', 'address': '123 Test St', 'city': 'Phnom Penh', 'rent_price': 1000, 'bedrooms': 2, 'bathrooms': 1, 'area_sqm': 100, 'property_type': 'apartment', 'status': 'available', 'verification_status': 'verified', 'owner': user}); print('Sample data created successfully')"
+    buildCommand: "mkdir -p /opt/render/project/src/backend && pip install -r requirements.txt && python manage.py collectstatic --no-input && python manage.py migrate"
     startCommand: "gunicorn housing_analyzer.wsgi:application --bind 0.0.0.0:$PORT"
     envVars:
       - key: PYTHON_VERSION
